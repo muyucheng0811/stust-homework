@@ -1,0 +1,192 @@
+﻿<Window x:Class="SimplePaint.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="WPF小畫家ver1" Height="720" Width="1200"
+        Background="#FFF9F6DB"
+        UseLayoutRounding="True"
+        SnapsToDevicePixels="True"
+        TextOptions.TextFormattingMode="Display">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<!-- 0 功能選單 -->
+			<RowDefinition Height="Auto"/>
+			<!-- 1 顏色/線寬/形狀 -->
+			<RowDefinition Height="Auto"/>
+			<!-- 2 工具列（獨立一排，避免被擠掉） -->
+			<RowDefinition/>
+			<!-- 3 畫布 -->
+			<RowDefinition Height="Auto"/>
+			<!-- 4 狀態列 -->
+		</Grid.RowDefinitions>
+
+		<!-- 0 功能選單 -->
+		<Menu Grid.Row="0">
+			<MenuItem Header="檔案(_F)">
+				<MenuItem Header="開啟新畫布" Click="NewCanvas_Click" InputGestureText="Ctrl+N"/>
+				<MenuItem Header="儲存畫布" Click="SaveCanvas_Click" InputGestureText="Ctrl+S"/>
+			</MenuItem>
+			<MenuItem Header="編輯(_E)">
+				<MenuItem Header="復原" Command="ApplicationCommands.Undo" InputGestureText="Ctrl+Z"/>
+				<MenuItem Header="重做" Command="ApplicationCommands.Redo" InputGestureText="Ctrl+Y"/>
+			</MenuItem>
+		</Menu>
+
+		<!-- 1 顏色/線寬/形狀（保留你原本的三欄配置） -->
+		<Grid Grid.Row="1" Margin="6">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="2.2*"/>
+				<ColumnDefinition Width="2.2*"/>
+				<ColumnDefinition Width="*"/>
+			</Grid.ColumnDefinitions>
+
+			<!-- 筆刷色彩 -->
+			<Border Grid.Column="0" CornerRadius="6" Background="#C7F6FF" Padding="6">
+				<DockPanel LastChildFill="True">
+					<TextBlock Text="筆刷色彩" VerticalAlignment="Center" Margin="4,0"/>
+					<StackPanel Orientation="Horizontal" Margin="8,0,0,0">
+						<ComboBox x:Name="cmbStrokeColor"
+                                  Width="220" MaxDropDownHeight="320"
+                                  SelectionChanged="cmbStrokeColor_SelectionChanged"
+                                  IsTextSearchEnabled="False">
+							<ComboBox.ItemTemplate>
+								<DataTemplate>
+									<StackPanel Orientation="Horizontal" Margin="2">
+										<Border Width="24" Height="24" Margin="2"
+                                                BorderBrush="Black" BorderThickness="0.5"
+                                                Background="{Binding Brush}"/>
+										<TextBlock Text="{Binding Name}" Margin="6,0,0,0" VerticalAlignment="Center"/>
+									</StackPanel>
+								</DataTemplate>
+							</ComboBox.ItemTemplate>
+						</ComboBox>
+						<Button Content="進階…" Margin="6,0,0,0" Padding="10,2" Click="btnStrokeAdvanced_Click"/>
+					</StackPanel>
+				</DockPanel>
+			</Border>
+
+			<!-- 填滿色彩 -->
+			<Border Grid.Column="1" CornerRadius="6" Background="#FFD2A983" Padding="6" Margin="6,0">
+				<DockPanel LastChildFill="True">
+					<TextBlock Text="填滿色彩" VerticalAlignment="Center" Margin="4,0"/>
+					<StackPanel Orientation="Horizontal" Margin="8,0,0,0">
+						<ComboBox x:Name="cmbFillColor"
+                                  Width="220" MaxDropDownHeight="320"
+                                  SelectionChanged="cmbFillColor_SelectionChanged"
+                                  IsTextSearchEnabled="False">
+							<ComboBox.ItemTemplate>
+								<DataTemplate>
+									<StackPanel Orientation="Horizontal" Margin="2">
+										<Border Width="24" Height="24" Margin="2"
+                                                BorderBrush="Black" BorderThickness="0.5"
+                                                Background="{Binding Brush}"/>
+										<TextBlock Text="{Binding Name}" Margin="6,0,0,0" VerticalAlignment="Center"/>
+									</StackPanel>
+								</DataTemplate>
+							</ComboBox.ItemTemplate>
+						</ComboBox>
+						<Button Content="進階…" Margin="6,0,0,0" Padding="10,2" Click="btnFillAdvanced_Click"/>
+					</StackPanel>
+				</DockPanel>
+			</Border>
+
+			<!-- 線寬/形狀/文字大小 -->
+			<DockPanel Grid.Column="2">
+				<StackPanel Orientation="Horizontal" DockPanel.Dock="Left" VerticalAlignment="Center">
+					<TextBlock Text="線寬" VerticalAlignment="Center"/>
+					<ComboBox x:Name="cmbStroke" Width="70" Margin="6,0,0,0" SelectedIndex="1">
+						<ComboBoxItem Content="1"/>
+						<ComboBoxItem Content="2"/>
+						<ComboBoxItem Content="3"/>
+						<ComboBoxItem Content="4"/>
+						<ComboBoxItem Content="5"/>
+						<ComboBoxItem Content="8"/>
+					</ComboBox>
+
+					<TextBlock Text="形狀" VerticalAlignment="Center" Margin="12,0,0,0"/>
+					<ComboBox x:Name="cmbShape" Width="100" Margin="6,0,0,0" SelectedIndex="0">
+						<ComboBoxItem Content="矩形"/>
+						<ComboBoxItem Content="橢圓"/>
+						<ComboBoxItem Content="線段"/>
+						<ComboBoxItem Content="自由筆"/>
+						<ComboBoxItem Content="文字"/>
+					</ComboBox>
+
+					<TextBlock Text="文字大小" VerticalAlignment="Center" Margin="12,0,0,0"/>
+					<ComboBox x:Name="cmbTextSize" Width="80" Margin="6,0,0,0" SelectedIndex="2">
+						<ComboBoxItem Content="16"/>
+						<ComboBoxItem Content="20"/>
+						<ComboBoxItem Content="24"/>
+						<ComboBoxItem Content="32"/>
+						<ComboBoxItem Content="48"/>
+					</ComboBox>
+				</StackPanel>
+			</DockPanel>
+		</Grid>
+
+		<!-- 2 工具列（獨立一排，永遠可見；寬度太小會自動換行） -->
+		<Border Grid.Row="2" Background="#FFEEDCC0" Padding="4,2" Margin="6,0,6,6" CornerRadius="6">
+			<ToolBarTray HorizontalAlignment="Stretch">
+				<ToolBar Band="0" BandIndex="0">
+					<ToggleButton x:Name="tbSelect" ToolTip="選取" Margin="2"
+                                  Checked="ToolToggle_Checked" Unchecked="ToolToggle_Unchecked">
+						<Rectangle Width="18" Height="18" Stroke="Black" StrokeDashArray="2,2"/>
+					</ToggleButton>
+					<ToggleButton x:Name="tbLine" ToolTip="線段" Margin="2"
+                                  Checked="ToolToggle_Checked" Unchecked="ToolToggle_Unchecked">
+						<Canvas Width="18" Height="18">
+							<Line X1="2" Y1="16" X2="16" Y2="2" Stroke="Black" StrokeThickness="2"/>
+						</Canvas>
+					</ToggleButton>
+					<ToggleButton x:Name="tbRect" ToolTip="矩形" Margin="2"
+                                  Checked="ToolToggle_Checked" Unchecked="ToolToggle_Unchecked">
+						<Rectangle Width="18" Height="12" Stroke="Black" Fill="#0000" StrokeThickness="2"/>
+					</ToggleButton>
+					<ToggleButton x:Name="tbEllipse" ToolTip="橢圓" Margin="2"
+                                  Checked="ToolToggle_Checked" Unchecked="ToolToggle_Unchecked">
+						<Ellipse Width="16" Height="16" Stroke="Black" Fill="#0000" StrokeThickness="2"/>
+					</ToggleButton>
+					<ToggleButton x:Name="tbFree" ToolTip="自由筆" Margin="2"
+                                  Checked="ToolToggle_Checked" Unchecked="ToolToggle_Unchecked">
+						<Polyline Points="2,14 5,6 9,12 14,4 16,10" Stroke="Black" StrokeThickness="2"/>
+					</ToggleButton>
+					<ToggleButton x:Name="tbEraser" ToolTip="橡皮擦" Margin="2"
+                                  Checked="ToolToggle_Checked" Unchecked="ToolToggle_Unchecked">
+						<Polygon Points="3,12 8,3 15,10 10,17" Fill="#DDD" Stroke="Black" StrokeThickness="1.5"/>
+					</ToggleButton>
+					<Button x:Name="btnDelete" ToolTip="刪除（刪選取；無選取時刪最後）" Margin="4,2,2,2"
+                            Click="btnDelete_Click">
+						<StackPanel Orientation="Horizontal">
+							<Rectangle Width="12" Height="14" Fill="#0000" Stroke="Black" StrokeThickness="1.5"/>
+							<Rectangle Width="12" Height="2" Fill="Black" Margin="0,-12,0,0"/>
+						</StackPanel>
+					</Button>
+				</ToolBar>
+			</ToolBarTray>
+		</Border>
+
+		<!-- 3 畫布 -->
+		<ScrollViewer Grid.Row="3">
+			<Canvas x:Name="DrawingCanvas"
+                    Background="#FFF6F1D9"
+                    Width="2000" Height="1200"
+                    Focusable="True"
+                    FocusVisualStyle="{x:Null}"
+                    MouseLeftButtonDown="DrawingCanvas_MouseLeftButtonDown"
+                    MouseMove="DrawingCanvas_MouseMove"
+                    MouseLeftButtonUp="DrawingCanvas_MouseLeftButtonUp"
+                    MouseLeave="DrawingCanvas_MouseLeave"
+                    LostMouseCapture="DrawingCanvas_LostMouseCapture"/>
+		</ScrollViewer>
+
+		<!-- 4 狀態列 -->
+		<StatusBar Grid.Row="4">
+			<StatusBarItem>
+				<TextBlock x:Name="txtStatusLeft" Text="Ready"/>
+			</StatusBarItem>
+			<StatusBarItem HorizontalAlignment="Right">
+				<TextBlock x:Name="txtStatusRight" Text="Ready"/>
+			</StatusBarItem>
+		</StatusBar>
+	</Grid>
+</Window>

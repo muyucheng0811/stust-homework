@@ -1,0 +1,11 @@
+C:\Users\ACER\Desktop\視窗應用程式作業\視窗應用程式作業\obj\Debug\視窗應用程式作業.csproj.AssemblyReference.cache
+C:\Users\ACER\Desktop\視窗應用程式作業\視窗應用程式作業\obj\Debug\視窗應用程式作業.Properties.Resources.resources
+C:\Users\ACER\Desktop\視窗應用程式作業\視窗應用程式作業\obj\Debug\視窗應用程式作業.csproj.GenerateResource.cache
+C:\Users\ACER\Desktop\視窗應用程式作業\視窗應用程式作業\obj\Debug\視窗應用程式作業.csproj.CoreCompileInputs.cache
+C:\Users\ACER\Desktop\視窗應用程式作業\視窗應用程式作業\bin\Debug\視窗應用程式作業.exe.config
+C:\Users\ACER\Desktop\視窗應用程式作業\視窗應用程式作業\bin\Debug\視窗應用程式作業.exe
+C:\Users\ACER\Desktop\視窗應用程式作業\視窗應用程式作業\bin\Debug\視窗應用程式作業.pdb
+C:\Users\ACER\Desktop\視窗應用程式作業\視窗應用程式作業\obj\Debug\視窗應用程式作業.Form1.resources
+C:\Users\ACER\Desktop\視窗應用程式作業\視窗應用程式作業\obj\Debug\視窗應用程式作業.exe
+C:\Users\ACER\Desktop\視窗應用程式作業\視窗應用程式作業\obj\Debug\視窗應用程式作業.pdb
+C:\Users\ACER\Desktop\視窗應用程式作業\視窗應用程式作業\obj\Debug\視窗應用程式作業.exe.config
